@@ -18,6 +18,7 @@ mongoose.connect('mongodb://annadeu3:abc123@ds025772.mlab.com:25772/ecommerce', 
 });
 
 //middelware-logging
+app.use(express.static(__dirname + '/public'));
 app.use(morgan('dev'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true}));
