@@ -41,7 +41,11 @@ app.post('/create-user', function (request, response, next) {
 
 
 app.get('/', function(request, response) {
-	response.render('home');
+	response.render('main/home');
+});
+
+app.get('/about', function(request, response) {
+	response.render('main/about');
 });
 
 
