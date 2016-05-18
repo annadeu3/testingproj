@@ -46,3 +46,16 @@ UserSchema.pre('save', function (next) {
 
 
 /* Compare the password in the database and the one the User types in */
+
+//making own method === not built-in method
+UserSchema.methods.comparePassword = function(password) {
+	return bcrypt.compareSync(password, this.password);
+};
+
+
+//to export the entire schema
+module.exports = mongoose.model('User', UserSchema);
+
+
+
+

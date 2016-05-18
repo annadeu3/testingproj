@@ -1,17 +1,37 @@
 var express = require('express');
 var morgan = require('morgan');
+var mongoose = require('mongoose');
+var User = require('./models/user');
+var bodyParser = require('body-parser');
+
 var app = express();
 
-//middelware- logging
-app.use(morgan('dev'));
 
-app.get('/', function (request, response) {
-	var name = "Anna";
-	response.json('My name is ' + name);
+mongoose.connect('mongodb://annadeu3:abc123@ds025772.mlab.com:25772/ecommerce', function(err) {
+	if (err) {
+		console.log(err);
+	} else {
+		console.log('Connected to the database');
+	}
 });
 
-app.get('/name', function (request, response) {
-	response.json('Jason');
+//middelware-logging
+app.use(morgan('dev'));
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: true}));
+
+app.post('/create-user', function (request, response, next) {
+	var user = new User();
+
+	user.profile.name = request.body.name;
+	user.password = request.body.password;
+	user.email = request.body.email;
+
+	user.save(function(err) {
+		if (err) return next(err);
+
+		response.json("Successfully created a new user");
+	});
 });
 
 app.listen(3000, function (err) {
