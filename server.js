@@ -26,28 +26,11 @@ app.engine('ejs', engine);
 app.set('view engine', 'ejs');
 
 
+var mainRoutes = require('./routes/main');
+var userRoutes = require('./routes/user');
 
-app.post('/create-user', function (request, response, next) {
-	var user = new User();
-
-	user.profile.name = request.body.name;
-	user.password = request.body.password;
-	user.email = request.body.email;
-
-	user.save(function(err) {
-		if (err) return next(err);
-		response.json("Successfully created a new user");
-	});
-});
-
-
-app.get('/', function(request, response) {
-	response.render('main/home');
-});
-
-app.get('/about', function(request, response) {
-	response.render('main/about');
-});
+app.use(mainRoutes);
+app.use(userRoutes);
 
 
 app.listen(3000, function (err) {
