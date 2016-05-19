@@ -11,8 +11,9 @@ var flash = require('express-flash');
 
 var app = express();
 
+var secret = require('./config/secret');
 
-mongoose.connect('mongodb://annadeu3:abc123@ds025772.mlab.com:25772/ecommerce', function(err) {
+mongoose.connect(secret.database, function(err) {
 	if (err) {
 		console.log(err);
 	} else {
@@ -29,7 +30,7 @@ app.use(cookieParser());
 app.use(session({
 	resave: true,
 	saveUninitialized: true,
-	secret: "Anna123"
+	secret: secret.secretKey
 }));
 app.use(flash());
 
@@ -44,8 +45,8 @@ app.use(mainRoutes);
 app.use(userRoutes);
 
 
-app.listen(3000, function (err) {
+app.listen(secret.port, function (err) {
 	if (err) throw err;
-	console.log("Server is running successfully");
+	console.log("Server is running successfully on port " + secret.port);
 });
 
