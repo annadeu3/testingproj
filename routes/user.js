@@ -4,8 +4,8 @@ var passport = require('passport');
 var passportConf = require('../config/passport');
 
 router.get('/login', function(request, response, next) {
-	if (request.user) return response.redirect('/');
-	response.render('accounts/login', {message: request.flash('loginMessage')});
+  if (request.user) return response.redirect('/');
+  response.render('accounts/login', { message: request.flash('loginMessage')});
 });
 
 router.post('/login', passport.authenticate('local-login', {
@@ -14,18 +14,20 @@ router.post('/login', passport.authenticate('local-login', {
 	failureFlash: true
 }));
 
+router.get('/profile', function(request, response, next) {
+  User.findOne({ _id: request.user._id }, function(err, user) {
+    if (err) return next(err);
+
+    response.render('accounts/profile', { user: user });
+  });
+});
+
 router.get('/signup', function(request, response, next) {
 	response.render('accounts/signup', {
 		errors: request.flash('errors')
 	});
 });
 
-router.get('/profile', function(request, response, next) {
-	User.findOne({ _id: request.user._id }, function(err, user) {
-		if (err) return next(err);
-		response.render('accounts/profile', { user: user });
-	});
-});
 
 router.post('/signup', function (request, response, next) {
 	var user = new User();
