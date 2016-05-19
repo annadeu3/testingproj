@@ -3,7 +3,9 @@ var User = require('../models/user');
 
 
 router.get('/signup', function(request, response, next) {
-	response.render('accounts/signup');
+	response.render('accounts/signup', {
+		errors: request.flash('errors')
+	});
 });
 
 
@@ -16,13 +18,13 @@ router.post('/signup', function (request, response, next) {
 
 	User.findOne({ email: request.body.email }, function(err, existingUser) {
 		if(existingUser) {
-			console.log(request.body.email + " already exists");
+			request.flash('errors', 'Account with that email already exists');
 			return response.redirect('/signup');
 		} else {
 			user.save(function(err, user) {
 				if (err) return next(err);
 
-				response.json('New user has been created!');
+				return response.redirect('/');
 			});
 		}
 	});
