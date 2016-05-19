@@ -2,7 +2,9 @@ var router = require('express').Router();
 var User = require('../models/user');
 
 
-
+router.get('/signup', function(request, response, next) {
+	response.render('accounts/signup');
+});
 
 
 router.post('/signup', function (request, response, next) {
